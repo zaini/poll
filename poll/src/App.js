@@ -6,7 +6,22 @@ export default class App extends React.Component{
         super(props);
 
         this.state = {
-            values: ["", "", ""]
+            values: ["", "", ""],
+            poll: {
+                pollID: "1",
+                password: "password123",
+                DoC: "10:09:00 11//11/2011",
+                DoD: "11:10:10 12/11/2011",
+                questions: [{
+                    required: true,
+                    question: "Which one?",
+                    options: [{type: "short-text", value: "this"}, {type: "short-text", value: "that"}, {type: "short-text", value: "these"}]
+                }, {
+                    required: false,
+                    question: "Which other one?",
+                    options: [{type: "short-text", value: "mhm"}, {type: "short-text", value: "hmm"}, {type: "short-text", value: "hmmm"}]
+                }]
+            }
         }
     }
 
@@ -37,6 +52,22 @@ export default class App extends React.Component{
         return (
             <div>
                 <h1>poll</h1>
+                {
+                    [this.state.poll.pollID, <br/>, this.state.poll.password, <br/>, this.state.poll.DoC, <br/>, this.state.poll.DoD]
+                }
+                <br/>
+                {
+                    this.state.poll.questions.map((question, qIndex) => {
+                        return [question.question, ` required: ${question.required}`, <br/>, question.options.map((option, oIndex) => {
+                            return [option.value, <br/>];
+                        }) ,<br/>]
+                    })
+                }
+                {
+                    <button type={"submit"}>vote</button>
+                }
+
+                <br/><br/>
                 <input type='text' placeholder="type question here" /> <br/>
                 {
                     this.state.values.map((value, index) => {
