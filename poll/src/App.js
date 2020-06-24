@@ -2,83 +2,119 @@ import React from 'react';
 import './App.scss';
 
 export default class App extends React.Component{
+    emptyQuestionObject;
     constructor(props) {
         super(props);
 
+        this.emptyQuestionObject = {
+            required: true,
+            question: undefined,
+            options: [{type: "short-text", value: undefined}, {type: "short-text", value: undefined}, {type: "short-text", value: undefined}]
+        };
+
         this.state = {
-            values: ["", "", ""],
             poll: {
                 pollID: "1",
-                password: "password123",
-                DoC: "10:09:00 11//11/2011",
-                DoD: "11:10:10 12/11/2011",
-                questions: [{
-                    required: true,
-                    question: "Which one?",
-                    options: [{type: "short-text", value: "this"}, {type: "short-text", value: "that"}, {type: "short-text", value: "these"}]
-                }, {
-                    required: false,
-                    question: "Which other one?",
-                    options: [{type: "short-text", value: "mhm"}, {type: "short-text", value: "hmm"}, {type: "short-text", value: "hmmm"}]
-                }]
+                password: null,
+                DoC: undefined,
+                DoD: undefined,
+                questions: []
             }
         }
     }
 
-    addOption = () => {
+    changeOption = (value, qIndex, oIndex) => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions[qIndex].options[oIndex].value = value;
         this.setState({
-            values: [...this.state.values, ""]
-        })
+            poll: poll
+        });
     }
 
-    removeOption = (index) => {
+    addOption = (qIndex) => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions[qIndex].options.push({type: "short-text", value: undefined});
+        console.log(poll.questions);
+        this.setState({
+            poll: poll
+        });
+    }
+
+    removeOption = (qIndex, oIndex) => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions[qIndex].options.splice(oIndex, 1);
+        this.setState({
+            poll: poll
+        });
+    }
+
+    changeQuestion = (value, qIndex) => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions[qIndex].question = value;
+        this.setState({
+            poll: poll
+        });
+    }
+
+    addEmptyQuestion = () => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions.push(JSON.parse(JSON.stringify(this.emptyQuestionObject)));
+        this.setState({
+            poll: poll
+        });
+    }
+
+    removeQuestion = (index) => {
         console.log(index);
-        let values = [...this.state.values];
-        values.splice(index, 1);
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions.splice(index, 1);
         this.setState({
-            values: values
-        })
+            poll: poll
+        });
     }
 
-    changeValue = (e) => {
-        let values = [...this.state.values];
-        values[e.target.name] = e.target.value;
+    changePassword = (value) => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.password = value;
         this.setState({
-            values: values
-        })
+            poll: poll
+        });
+    }
+
+    componentDidMount() {
+        this.addEmptyQuestion();
     }
 
     render() {
         return (
-            <div>
+            <div style={{margin: "auto", width: "50%"}}>
                 <h1>poll</h1>
-                {
-                    [this.state.poll.pollID, <br/>, this.state.poll.password, <br/>, this.state.poll.DoC, <br/>, this.state.poll.DoD]
-                }
-                <br/>
+
                 {
                     this.state.poll.questions.map((question, qIndex) => {
-                        return [question.question, ` required: ${question.required}`, <br/>, question.options.map((option, oIndex) => {
-                            return [option.value, <br/>];
-                        }) ,<br/>]
+                        let questionOptions = question.options.map((option, oIndex) => {
+                            let optionBox = <input key={`q${qIndex}o${oIndex}`} name={`q${qIndex}o${oIndex}`} type='text' placeholder="type option here" value={option.value} onChange={(e) => this.changeOption(e.target.value, qIndex, oIndex)}/>;
+                            let removeOptionButton = <button onClick={() => this.removeOption(qIndex, oIndex)}>x</button>
+                            return [optionBox, removeOptionButton, <br/>]
+                        })
+
+                        let questionInput = <input key={`q${qIndex}`} name={`q${qIndex}`} type='text' placeholder="type question here" value={question.question} onChange={(e) => this.changeQuestion(e.target.value, qIndex)}/>;
+                        let removeQuestion = <button onClick={() => this.removeQuestion(qIndex)}>x</button>;
+                        let addOptionButton = <button onClick={() => this.addOption(qIndex)}>add option</button>;
+                        return [questionInput, removeQuestion, <br/>, questionOptions, addOptionButton, <br/>, <br/>]
                     })
-                }
-                {
-                    <button type={"submit"}>vote</button>
                 }
 
                 <br/><br/>
-                <input type='text' placeholder="type question here" /> <br/>
-                {
-                    this.state.values.map((value, index) => {
-                        let option = <input key={index} name={index} type='text' placeholder="type option here" value={value} onChange={this.changeValue}/>;
-                        let remove = <button onClick={() => this.removeOption(index)}>x</button>
-                        return [option, remove, <br/>]
-                    })
-                }
-                <button onClick={() => this.addOption()}>add option</button> <br/>
-                <button>add question</button> <br/>
-                <input type='text' placeholder="type password here" /> <br/>
+                <button onClick={() => this.addEmptyQuestion()}>add question</button>
+                <br/>
+                <input type='text' placeholder="type password here" onChange={(e) => this.changePassword(e.target.value)}/>
+                <br/><br/>
+                <button onClick={() => console.log(JSON.stringify(this.state.poll))}>submit</button>
+
+                <br/><br/>
+                {JSON.stringify(this.state.poll)}
+
             </div>
         )
     }
