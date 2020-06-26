@@ -12,15 +12,21 @@ export default class App extends React.Component{
 
     render() {
         return (
-            <div style={{margin: "auto", width: "50%"}}>
-                <h1>Poll</h1>
-                <h2>Create Poll</h2>
+            <div style={{margin: "0 auto", width: "50%"}}>
+                <div style={{textAlign: "center"}}>
+                    <h1 className='title'><a href="/">Poll</a></h1>
+                </div>
+                <br/>
                 <Router>
                     <Route exact path={"/"} component={CreatePoll}/>
                     <Route exact path={"/:poll_id"} component={Poll}/>
                     <Route exact path={"/:poll_id/r"} component={PollResults}/>
                 </Router>
 
+                <br/><br/>
+                <a href="/1">example poll 1</a>
+                <br/>
+                <a href="/1/r">poll 1 results</a>
             </div>
         )
     }
