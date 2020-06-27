@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from "axios";
+import ShareButtons from "./Share";
 
 export default class Poll extends React.Component {
     constructor(props) {
@@ -27,8 +28,17 @@ export default class Poll extends React.Component {
         })
         this.setState({
             poll: poll
-        }, () => console.log(this.state.poll));
-        //() => window.location.href = window.location.href + "/r"
+        }, () => {
+            axios.put(`http://localhost:5001/polls`, this.state.poll)
+                .then(res => {
+                    if (res.status === 200) {
+                        alert(`Your vote has been submitted!`);
+                        window.location.href = window.location.href + "/r";
+                    } else{
+                        alert("Something went wrong with submitting your vote. Please try again or contact the admin.");
+                    }
+                });
+        });
     }
 
     componentDidMount() {
@@ -67,8 +77,8 @@ export default class Poll extends React.Component {
                     <br/><br/>
                     <button onClick={() => this.submitVote()}>vote</button>
                     <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
-                    <button onClick={() => console.log(JSON.stringify(this.state.poll))}>share</button>
 
+                    <ShareButtons shareUrl={window.location.href} />
                 </div>
             )
         } else {

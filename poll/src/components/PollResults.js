@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from "axios";
+import ShareButtons from "./Share";
 
 export default class PollResults extends React.Component{
     constructor(props) {
@@ -32,16 +33,27 @@ export default class PollResults extends React.Component{
                         this.state.poll.questions.map((question, qIndex) => {
                             let questionTitle = <p key={`q${qIndex}`} >{question.question}</p>;
 
+                            let totalVotes = 0;
+                            question.options.forEach(option => {
+                                totalVotes += option.votes;
+                            })
+                            let votes = <p>Total Votes: {totalVotes}</p>
+
                             let options = question.options.map((option, oIndex) => {
-                                let optionText = <li key={`q${qIndex}o${oIndex}`}>{option.value} got {option.votes} votes</li>;
+                                let optionText = <div key={`q${qIndex}o${oIndex}`}>{option.value}
+                                <span>{option.votes} votes | {option.votes === 0 ? 0 : Math.floor(100 * option.votes / totalVotes)}%</span>
+                                </div>;
                                 return [optionText]
                             })
 
-                            return [questionTitle, options, <br/>]
+                            return [questionTitle, options, votes, <br/>]
                         })
                     }
 
                     <button onClick={() => window.location.href = window.location.href.slice(0, -2)}>vote</button>
+
+                    <ShareButtons shareUrl={window.location.href} />
+
                 </div>
         )} else {
             return (

@@ -23,4 +23,11 @@ router.route('/').post((req, res, next) => {
         .catch(err => res.status(400).json(`error: ${err}`));
 });
 
+router.route('/').put((req, res, next) => {
+    Poll.findOneAndUpdate({pollID: req.body.pollID}, {questions: req.body.questions})
+        .then((message) => {
+            res.json(message);
+        }).catch(next);
+});
+
 module.exports = router;
