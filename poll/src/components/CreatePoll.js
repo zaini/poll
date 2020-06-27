@@ -104,29 +104,26 @@ export default class CreatePoll extends React.Component{
                 <br/>
                 {
                     this.state.poll.questions.map((question, qIndex) => {
+                        let questionInput = <input key={`q${qIndex}`} name={`q${qIndex}`} type='text' placeholder="type question here" value={question.question} onChange={(e) => this.changeQuestion(e.target.value, qIndex)}/>;
+                        let questionLabel = <label htmlFor={`q${qIndex}`}>Question</label>;
+                        let removeQuestion = <button onClick={() => this.removeQuestion(qIndex)}>remove</button>;
+
                         let questionOptions = question.options.map((option, oIndex) => {
                             let optionBox = <input key={`q${qIndex}o${oIndex}`} name={`q${qIndex}o${oIndex}`} type='text' placeholder="type option here" value={option.value} onChange={(e) => this.changeOption(e.target.value, qIndex, oIndex)}/>;
                             let removeOptionButton = <button onClick={() => this.removeOption(qIndex, oIndex)}>remove</button>
                             return [optionBox, removeOptionButton, <br/>]
                         })
+                        let addOptionButton = <button onClick={() => this.addOption(qIndex)}>add option</button>;
 
-                        let questionInput = <input key={`q${qIndex}`} name={`q${qIndex}`} type='text' placeholder="type question here" value={question.question} onChange={(e) => this.changeQuestion(e.target.value, qIndex)}/>;
-                        let removeQuestion = <button onClick={() => this.removeQuestion(qIndex)}>remove</button>;
-                        let addOptionButton = <button className="addButton" onClick={() => this.addOption(qIndex)}>add option</button>;
-                        return [questionInput, removeQuestion, <br/>, questionOptions, addOptionButton, <br/>, <br/>]
+                        return [questionLabel, <br/>, questionInput, removeQuestion, <br/>, questionOptions, addOptionButton, <br/>, <br/>]
                     })
                 }
 
-                <button className="addButton" onClick={() => this.addEmptyQuestion()}>add question</button>
+                <button onClick={() => this.addEmptyQuestion()}>add question</button>
                 <br/><br/>
-                <input className="password" type='password' placeholder="type password here" onChange={(e) => this.changePassword(e.target.value)}/>
+                <input type='password' placeholder="type password here" onChange={(e) => this.changePassword(e.target.value)}/>
                 <br/><br/>
                 <button onClick={() => this.submitPoll()}>submit</button>
-                <button onClick={() => console.log(JSON.stringify(this.state.poll))}>results</button>
-                <button onClick={() => console.log(JSON.stringify(this.state.poll))}>share</button>
-
-                <br/><br/>
-                {JSON.stringify(this.state.poll)}
 
             </div>
         )

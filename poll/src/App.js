@@ -12,7 +12,7 @@ export default class App extends React.Component{
 
     render() {
         return (
-            <div style={{margin: "0 auto", width: "50%"}}>
+            <div>
                 <div style={{textAlign: "center"}}>
                     <h1 className='title'><a href="/">Poll</a></h1>
                 </div>

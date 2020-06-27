@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from "axios";
 
-export default class Poll extends React.Component{
+export default class Poll extends React.Component {
     constructor(props) {
         super(props);
 
@@ -28,6 +28,7 @@ export default class Poll extends React.Component{
         this.setState({
             poll: poll
         }, () => console.log(this.state.poll));
+        //() => window.location.href = window.location.href + "/r"
     }
 
     componentDidMount() {
@@ -53,8 +54,9 @@ export default class Poll extends React.Component{
                             let questionTitle = <p key={`q${qIndex}`}>{question.question}</p>;
 
                             let options = question.options.map((option, oIndex) => {
-                                let optionText = <li key={`q${qIndex}o${oIndex}`}
-                                                     onClick={() => this.voteOption(qIndex, oIndex)}>{option.value}</li>;
+                                let optionText = <div key={`q${qIndex}o${oIndex}`}
+                                                      onClick={() => this.voteOption(qIndex, oIndex)}>{option.value}</div>;
+
                                 return [optionText]
                             })
 
@@ -62,17 +64,14 @@ export default class Poll extends React.Component{
                         })
                     }
 
-                    <button onClick={() => this.submitVote()}>submit</button>
+                    <br/><br/>
+                    <button onClick={() => this.submitVote()}>vote</button>
+                    <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
+                    <button onClick={() => console.log(JSON.stringify(this.state.poll))}>share</button>
 
-                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                    poll {this.state.pollID}
-                    <br/>
-                    pollID: {this.state.poll.pollID}
-                    <br/>
-                    password: {this.state.poll.password}
                 </div>
             )
-        } else{
+        } else {
             return (
                 <div>poll not found</div>
             )

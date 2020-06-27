@@ -1,11 +1,10 @@
 *{
   color: #464646;
   font-family: 'Roboto', serif;
-  margin: 2px;
 }
 
 .title{
-  border: 2px #464646 solid;
+  border: 4px #464646 solid;
   border-right: 2px transparent solid;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
@@ -15,31 +14,4 @@
   a{
     text-decoration: none;
   }
-}
-
-button{
-  background-color: transparent;
-  border: 2px #464646 solid;
-  border-radius: 4px;
-  transition-duration: 0.3s;
-  padding: 6px;
-}
-
-button:hover{
-  background-color: #464646;
-  color: white;
-}
-
-input{
-  padding: 5px;
-  width: 80%;
-}
-
-.addButton{
-  margin-top: 10px;
-  margin-left: 1%;
-}
-
-.password{
-  width: 16%;
 }
