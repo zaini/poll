@@ -21,8 +21,21 @@ export default class Poll extends React.Component {
     }
 
     submitVote = () => {
-        // TODO check everything required has been voted on, otherwise you don't have to count it
+        // TODO redo to be more efficient
         let poll = JSON.parse(JSON.stringify(this.state.poll));
+
+        let valid = true;
+        poll.questions.forEach((question, qIndex) => {
+            if (question.required && this.state.votes[qIndex] === undefined){
+                valid = false;
+            }
+        })
+
+        if (!valid){
+            alert(`You must respond to all required questions.`);
+            return
+        }
+
         this.state.votes.forEach((option, qIndex) => {
             poll.questions[qIndex].options[option].votes++;
         })
@@ -61,7 +74,7 @@ export default class Poll extends React.Component {
 
                     {
                         this.state.poll.questions.map((question, qIndex) => {
-                            let questionTitle = <p key={`q${qIndex}`}>{question.question}</p>;
+                            let questionTitle = <p key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
 
                             let options = question.options.map((option, oIndex) => {
                                 let optionText = <div key={`q${qIndex}o${oIndex}`}

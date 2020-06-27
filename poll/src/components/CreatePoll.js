@@ -73,6 +73,14 @@ export default class CreatePoll extends React.Component{
         });
     }
 
+    changeQuestionRequirement = (qIndex, required) => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+        poll.questions[qIndex].required = required;
+        this.setState({
+            poll: poll
+        });
+    }
+
     changePassword = (value) => {
         let poll = JSON.parse(JSON.stringify(this.state.poll));
         poll.password = value;
@@ -108,6 +116,8 @@ export default class CreatePoll extends React.Component{
                         let questionLabel = <label htmlFor={`q${qIndex}`}>Question</label>;
                         let removeQuestion = <button onClick={() => this.removeQuestion(qIndex)}>remove</button>;
 
+                        let requiredCheckbox = <input type='checkbox' checked={this.state.poll.questions[qIndex].required} onChange={(e) => this.changeQuestionRequirement(qIndex, e.target.checked)}/>
+
                         let questionOptions = question.options.map((option, oIndex) => {
                             let optionBox = <input key={`q${qIndex}o${oIndex}`} name={`q${qIndex}o${oIndex}`} type='text' placeholder="type option here" value={option.value} onChange={(e) => this.changeOption(e.target.value, qIndex, oIndex)}/>;
                             let removeOptionButton = <button onClick={() => this.removeOption(qIndex, oIndex)}>remove</button>
@@ -115,7 +125,7 @@ export default class CreatePoll extends React.Component{
                         })
                         let addOptionButton = <button onClick={() => this.addOption(qIndex)}>add option</button>;
 
-                        return [questionLabel, <br/>, questionInput, removeQuestion, <br/>, questionOptions, addOptionButton, <br/>, <br/>]
+                        return [questionLabel, <br/>, questionInput, removeQuestion, <br/>, questionOptions, addOptionButton, <p>required {requiredCheckbox}</p>, <br/>, <br/>]
                     })
                 }
 
@@ -124,7 +134,7 @@ export default class CreatePoll extends React.Component{
                 <input type='password' placeholder="type password here" onChange={(e) => this.changePassword(e.target.value)}/>
                 <br/><br/>
                 <button onClick={() => this.submitPoll()}>submit</button>
-
+                {JSON.stringify(this.state.poll)}
             </div>
         )
     }

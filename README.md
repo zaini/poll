@@ -2,12 +2,12 @@
 🗳️ simple polling 🗳️
 
 ## Working on
-* Questions can be set as required/non-required
+* ~~Questions can be set as required/non-required~~
+* ~~Validation for voting on required questions~~
+* Passwords
 * Validation for new polls
-* Validation for voting on required questions
 * Add graphs to results
 * Add styling
-* Passwords
 
 ## Ideas
 * Delete after X time
@@ -15,3 +15,4 @@
 * Add other types of voting (can select multiple options, select number in range, etc.)
 * Change PollIDs to be a hash
 * Update results page live
+* Explanation of design decisions
