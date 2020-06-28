@@ -89,16 +89,60 @@ export default class CreatePoll extends React.Component{
         });
     }
 
+    validatePoll = () => {
+        /**
+         * A valid poll:
+         * every question has at least one option
+         * has at least one question
+         * has no blank questions or options
+         */
+
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+
+        let containsQuestions = poll.questions.length > 0;
+
+        let numberOfOptionsPerQuestion = poll.questions.map(question => question.options.length);
+        let questionsContainOptions = !numberOfOptionsPerQuestion.includes(0);
+
+        let optionsAreValid = false;
+        let questionsAreValid = false;
+        if(questionsContainOptions){
+            let optionsPerQuestion = poll.questions.map(question => question.options);
+            let validatedOptionsPerQuestion = optionsPerQuestion.map(options => {
+                return options.map(option => option.value !== undefined && option.value !== "")
+            })
+
+            optionsAreValid = !validatedOptionsPerQuestion.map(a => a.includes(false)).includes(true);
+
+            let questionPerQuestion = poll.questions.map(question => question.question);
+            let validatedQuestionsPerQuestion = questionPerQuestion.map(question => {
+                return question !== undefined && question !== ""
+            })
+
+            questionsAreValid = !validatedQuestionsPerQuestion.includes(false);
+        }
+
+        // console.log(`has >0 questions: ${containsQuestions}\nhas >0 options ${questionsContainOptions}\nvalid options ${optionsAreValid}\nvalid questions: ${questionsAreValid}`);
+        // console.log(`valid poll: ${pollIsValid}`);
+
+        let pollIsValid = containsQuestions && questionsContainOptions && optionsAreValid && questionsAreValid;
+        return pollIsValid;
+    }
+
     submitPoll = () => {
-        axios.post(`http://localhost:5001/polls`, this.state.poll)
-            .then(res => {
-                if (res.status === 200) {
-                    alert(`Your poll has been posted! \nID: ${res.data.id}`);
-                    window.location.href = res.data.id;
-                } else{
-                    alert("Something went wrong with posting your poll. Please try again or contact the admin.");
-                }
-            });
+        if (this.validatePoll()) {
+            axios.post(`http://localhost:5001/polls`, this.state.poll)
+                .then(res => {
+                    if (res.status === 200) {
+                        alert(`Your poll has been posted! \nID: ${res.data.id}`);
+                        window.location.href = res.data.id;
+                    } else {
+                        alert("Something went wrong with posting your poll. Please try again or contact the admin.");
+                    }
+                });
+        } else{
+            alert("Poll cannot contain empty questions or options.\nPoll must contain at least one question.\nAll questions must contain at least one option.");
+        }
     }
 
     componentDidMount() {

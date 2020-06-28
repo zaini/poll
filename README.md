@@ -5,7 +5,7 @@
 * ~~Questions can be set as required/non-required~~
 * ~~Validation for voting on required questions~~
 * Passwords
-* Validation for new polls
+* ~~Validation for new polls~~
 * Add graphs to results
 * Add styling
 
