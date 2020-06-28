@@ -2,7 +2,7 @@ import React from 'react';
 import axios from "axios";
 import ShareButtons from "./Share";
 
-export default class PollResults extends React.Component{
+export default class PollResults extends React.Component {
     constructor(props) {
         super(props);
 
@@ -23,7 +23,7 @@ export default class PollResults extends React.Component{
     }
 
     render() {
-        if (this.state.poll.questions){
+        if (this.state.poll.questions) {
             return (
                 <div>
                     <h2>Poll Results</h2>
@@ -31,7 +31,7 @@ export default class PollResults extends React.Component{
 
                     {
                         this.state.poll.questions.map((question, qIndex) => {
-                            let questionTitle = <p key={`q${qIndex}`} >{question.question}</p>;
+                            let questionTitle = <p key={`q${qIndex}`}>{question.question}</p>;
 
                             let totalVotes = 0;
                             question.options.forEach(option => {
@@ -40,8 +40,10 @@ export default class PollResults extends React.Component{
                             let votes = <p>Total Votes: {totalVotes}</p>
 
                             let options = question.options.map((option, oIndex) => {
-                                let optionText = <div key={`q${qIndex}o${oIndex}`}>{option.value}
-                                <span>{option.votes} votes | {option.votes === 0 ? 0 : Math.floor(100 * option.votes / totalVotes)}%</span>
+                                let optionText = <div className={'result-option'}
+                                                      key={`q${qIndex}o${oIndex}`}>{option.value}
+                                    <span
+                                        className={'results'}>{option.votes} votes | {option.votes === 0 ? 0 : Math.floor(100 * option.votes / totalVotes)}%</span>
                                 </div>;
                                 return [optionText]
                             })
@@ -50,12 +52,16 @@ export default class PollResults extends React.Component{
                         })
                     }
 
-                    <button onClick={() => window.location.href = window.location.href.slice(0, -2)}>vote</button>
+                    <div className={'bottom-buttons'}>
+                        <button onClick={() => window.location.href = window.location.href.slice(0, -2)}>vote</button>
+                    </div>
+                    <br/><br/>
 
-                    <ShareButtons shareUrl={window.location.href} />
+                    <ShareButtons shareUrl={window.location.href}/>
 
                 </div>
-        )} else {
+            )
+        } else {
             return (
                 <div>poll not found</div>
             )

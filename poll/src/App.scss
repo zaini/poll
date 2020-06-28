@@ -3,6 +3,11 @@
   font-family: 'Roboto', serif;
 }
 
+.main-container{
+  width: 50%;
+  margin: 0 auto;
+}
+
 .title{
   border: 4px #464646 solid;
   border-right: 2px transparent solid;
@@ -13,5 +18,66 @@
 
   a{
     text-decoration: none;
+  }
+}
+
+.results{
+  transition-duration: 0.3s;
+  background-color: transparent;
+  float: right;
+}
+
+.result-option{
+  transition-duration: 0.3s;
+  border: 1px #484848 solid;
+  margin: 5px;
+  padding: 5px;
+}
+
+.result-option:hover{
+  background-color: #464646;
+  color: white;
+
+  .results{
+    color: white;
+  }
+}
+
+input{
+  background-color: white;
+  transition-duration: 0.3s;
+  border-radius: 4px;
+  border: 2px #484848 solid;
+  padding: 5px 10px;
+  margin: 5px 5px 5px 0px;
+}
+
+button{
+  background-color: white;
+  transition-duration: 0.3s;
+  border-radius: 4px;
+  border: 1px #484848 solid;
+  padding: 5px 10px;
+}
+
+button:hover{
+  background-color: #464646;
+  color: white;
+}
+
+.share-buttons{
+  display: flex;
+  text-align: center;
+  justify-content: space-evenly;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.bottom-buttons{
+  display: flex;
+  text-align: center;
+  justify-content: space-evenly;
+  button{
+    font-size: 140%;
   }
 }

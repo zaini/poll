@@ -177,7 +177,12 @@ export default class CreatePoll extends React.Component{
                 <br/><br/>
                 <input type='password' placeholder="type password here" onChange={(e) => this.changePassword(e.target.value)}/>
                 <br/><br/>
-                <button onClick={() => this.submitPoll()}>submit</button>
+
+                <div className={'bottom-buttons'}>
+                    <button onClick={() => this.submitPoll()}>submit</button>
+                </div>
+
+                <br/>
                 {JSON.stringify(this.state.poll)}
             </div>
         )

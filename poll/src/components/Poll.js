@@ -26,12 +26,12 @@ export default class Poll extends React.Component {
 
         let valid = true;
         poll.questions.forEach((question, qIndex) => {
-            if (question.required && this.state.votes[qIndex] === undefined){
+            if (question.required && this.state.votes[qIndex] === undefined) {
                 valid = false;
             }
         })
 
-        if (!valid){
+        if (!valid) {
             alert(`You must respond to all required questions.`);
             return
         }
@@ -47,7 +47,7 @@ export default class Poll extends React.Component {
                     if (res.status === 200) {
                         alert(`Your vote has been submitted!`);
                         window.location.href = window.location.href + "/r";
-                    } else{
+                    } else {
                         alert("Something went wrong with submitting your vote. Please try again or contact the admin.");
                     }
                 });
@@ -74,10 +74,11 @@ export default class Poll extends React.Component {
 
                     {
                         this.state.poll.questions.map((question, qIndex) => {
-                            let questionTitle = <p key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
+                            let questionTitle = <p
+                                key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
 
                             let options = question.options.map((option, oIndex) => {
-                                let optionText = <div key={`q${qIndex}o${oIndex}`}
+                                let optionText = <div className={'result-option'} key={`q${qIndex}o${oIndex}`}
                                                       onClick={() => this.voteOption(qIndex, oIndex)}>{option.value}</div>;
 
                                 return [optionText]
@@ -88,10 +89,13 @@ export default class Poll extends React.Component {
                     }
 
                     <br/><br/>
-                    <button onClick={() => this.submitVote()}>vote</button>
-                    <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
+                    <div className={'bottom-buttons'}>
+                        <button onClick={() => this.submitVote()}>vote</button>
+                        <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
+                    </div>
+                    <br/><br/>
 
-                    <ShareButtons shareUrl={window.location.href} />
+                    <ShareButtons shareUrl={window.location.href}/>
                 </div>
             )
         } else {

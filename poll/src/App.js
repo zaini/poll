@@ -12,7 +12,7 @@ export default class App extends React.Component{
 
     render() {
         return (
-            <div>
+            <div className={'main-container'}>
                 <div style={{textAlign: "center"}}>
                     <h1 className='title'><a href="/">Poll</a></h1>
                 </div>
@@ -27,6 +27,8 @@ export default class App extends React.Component{
                 <a href="/1">example poll 1</a>
                 <br/>
                 <a href="/1/r">poll 1 results</a>
+
+                <footer>Ali Zaini &copy; 2020 || Github // Linkedin // Email</footer>
             </div>
         )
     }
