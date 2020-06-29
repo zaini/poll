@@ -4,10 +4,10 @@
 ## Working on
 * ~~Questions can be set as required/non-required~~
 * ~~Validation for voting on required questions~~
-* Passwords
+* ~~Passwords~~
 * ~~Validation for new polls~~
 * Add graphs to results
-* Add styling
+* ~~Add styling~~
 
 ## Ideas
 * Delete after X time

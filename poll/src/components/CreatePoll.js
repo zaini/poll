@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from "axios";
 
-export default class CreatePoll extends React.Component{
+var bcrypt = require('bcryptjs');
+
+export default class CreatePoll extends React.Component {
     emptyQuestionObject;
 
     constructor(props) {
@@ -10,7 +12,11 @@ export default class CreatePoll extends React.Component{
         this.emptyQuestionObject = {
             required: true,
             question: undefined,
-            options: [{type: "short-text", value: undefined, votes: 0}, {type: "short-text", value: undefined, votes: 0}, {type: "short-text", value: undefined, votes: 0}]
+            options: [{type: "short-text", value: undefined, votes: 0}, {
+                type: "short-text",
+                value: undefined,
+                votes: 0
+            }, {type: "short-text", value: undefined, votes: 0}]
         };
 
         this.state = {
@@ -106,7 +112,7 @@ export default class CreatePoll extends React.Component{
 
         let optionsAreValid = false;
         let questionsAreValid = false;
-        if(questionsContainOptions){
+        if (questionsContainOptions) {
             let optionsPerQuestion = poll.questions.map(question => question.options);
             let validatedOptionsPerQuestion = optionsPerQuestion.map(options => {
                 return options.map(option => option.value !== undefined && option.value !== "")
@@ -129,8 +135,32 @@ export default class CreatePoll extends React.Component{
         return pollIsValid;
     }
 
+    encryptPoll = () => {
+        let poll = JSON.parse(JSON.stringify(this.state.poll));
+
+        let password = poll.password;
+        let that = this;
+
+        if (password === null || password === "") {
+            poll.password = null;
+            this.setState({
+                poll: poll
+            })
+        } else {
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(password, salt, function (err, hash) {
+                    poll.password = hash;
+                    that.setState({
+                        poll: poll
+                    })
+                });
+            });
+        }
+    }
+
     submitPoll = () => {
         if (this.validatePoll()) {
+            this.encryptPoll();
             axios.post(`http://localhost:5001/polls`, this.state.poll)
                 .then(res => {
                     if (res.status === 200) {
@@ -140,7 +170,55 @@ export default class CreatePoll extends React.Component{
                         alert("Something went wrong with posting your poll. Please try again or contact the admin.");
                     }
                 });
-        } else{
+        } else {
+            alert("Poll cannot contain empty questions or options.\nPoll must contain at least one question.\nAll questions must contain at least one option.");
+        }
+    }
+
+    submitPoll2 = () => {
+        if (this.validatePoll()) {
+            let poll = JSON.parse(JSON.stringify(this.state.poll));
+
+            let password = poll.password;
+            let that = this;
+
+            if (password === null || password === "") {
+                poll.password = null;
+                this.setState({
+                    poll: poll
+                }, () => {
+                    axios.post(`http://localhost:5001/polls`, this.state.poll)
+                        .then(res => {
+                            if (res.status === 200) {
+                                alert(`Your poll has been posted! \nID: ${res.data.id}`);
+                                window.location.href = res.data.id;
+                            } else {
+                                alert("Something went wrong with posting your poll. Please try again or contact the admin.");
+                            }
+                        });
+                })
+            } else {
+                bcrypt.genSalt(10, function (err, salt) {
+                    bcrypt.hash(password, salt, function (err, hash) {
+                        poll.password = hash;
+                        console.log(hash);
+                        that.setState({
+                            poll: poll
+                        }, () => {
+                            axios.post(`http://localhost:5001/polls`, that.state.poll)
+                                .then(res => {
+                                    if (res.status === 200) {
+                                        alert(`Your poll has been posted! \nID: ${res.data.id}`);
+                                        window.location.href = res.data.id;
+                                    } else {
+                                        alert("Something went wrong with posting your poll. Please try again or contact the admin.");
+                                    }
+                                });
+                        })
+                    });
+                });
+            }
+        } else {
             alert("Poll cannot contain empty questions or options.\nPoll must contain at least one question.\nAll questions must contain at least one option.");
         }
     }
@@ -156,30 +234,39 @@ export default class CreatePoll extends React.Component{
                 <br/>
                 {
                     this.state.poll.questions.map((question, qIndex) => {
-                        let questionInput = <input key={`q${qIndex}`} name={`q${qIndex}`} type='text' placeholder="type question here" value={question.question} onChange={(e) => this.changeQuestion(e.target.value, qIndex)}/>;
+                        let questionInput = <input key={`q${qIndex}`} name={`q${qIndex}`} type='text'
+                                                   placeholder="type question here" value={question.question}
+                                                   onChange={(e) => this.changeQuestion(e.target.value, qIndex)}/>;
                         let questionLabel = <label htmlFor={`q${qIndex}`}>Question</label>;
                         let removeQuestion = <button onClick={() => this.removeQuestion(qIndex)}>remove</button>;
 
-                        let requiredCheckbox = <input type='checkbox' checked={this.state.poll.questions[qIndex].required} onChange={(e) => this.changeQuestionRequirement(qIndex, e.target.checked)}/>
+                        let requiredCheckbox = <input type='checkbox'
+                                                      checked={this.state.poll.questions[qIndex].required}
+                                                      onChange={(e) => this.changeQuestionRequirement(qIndex, e.target.checked)}/>
 
                         let questionOptions = question.options.map((option, oIndex) => {
-                            let optionBox = <input key={`q${qIndex}o${oIndex}`} name={`q${qIndex}o${oIndex}`} type='text' placeholder="type option here" value={option.value} onChange={(e) => this.changeOption(e.target.value, qIndex, oIndex)}/>;
-                            let removeOptionButton = <button onClick={() => this.removeOption(qIndex, oIndex)}>remove</button>
+                            let optionBox = <input key={`q${qIndex}o${oIndex}`} name={`q${qIndex}o${oIndex}`}
+                                                   type='text' placeholder="type option here" value={option.value}
+                                                   onChange={(e) => this.changeOption(e.target.value, qIndex, oIndex)}/>;
+                            let removeOptionButton = <button
+                                onClick={() => this.removeOption(qIndex, oIndex)}>remove</button>
                             return [optionBox, removeOptionButton, <br/>]
                         })
                         let addOptionButton = <button onClick={() => this.addOption(qIndex)}>add option</button>;
 
-                        return [questionLabel, <br/>, questionInput, removeQuestion, <br/>, questionOptions, addOptionButton, <p>required {requiredCheckbox}</p>, <br/>, <br/>]
+                        return [questionLabel, <br/>, questionInput, removeQuestion,
+                            <br/>, questionOptions, addOptionButton, <p>required {requiredCheckbox}</p>, <br/>, <br/>]
                     })
                 }
 
                 <button onClick={() => this.addEmptyQuestion()}>add question</button>
                 <br/><br/>
-                <input type='password' placeholder="type password here" onChange={(e) => this.changePassword(e.target.value)}/>
+                <input type='password' placeholder="type password here"
+                       onChange={(e) => this.changePassword(e.target.value)}/>
                 <br/><br/>
 
                 <div className={'bottom-buttons'}>
-                    <button onClick={() => this.submitPoll()}>submit</button>
+                    <button onClick={() => this.submitPoll2()}>submit</button>
                 </div>
 
                 <br/>

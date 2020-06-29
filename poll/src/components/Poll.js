@@ -1,12 +1,14 @@
 import React from 'react';
 import axios from "axios";
 import ShareButtons from "./Share";
+var bcrypt = require('bcryptjs');
 
 export default class Poll extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            validPassword: false,
             pollID: this.props.match.params.poll_id,
             poll: {}
         };
@@ -54,12 +56,31 @@ export default class Poll extends React.Component {
         });
     }
 
+    changeEnteredPassword = (password) => {
+        this.setState({
+            password: password
+        })
+    }
+
+    submitPassword = () => {
+        let enteredPassword = this.state.password;
+        let hashedPassword = this.state.poll.password;
+        let that = this;
+        bcrypt.compare(enteredPassword, hashedPassword, function(err, res) {
+            console.log(res);
+            that.setState({
+                validPassword: res
+            })
+        });
+    }
+
     componentDidMount() {
         axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
             if (res.data) {
                 this.setState({
                     poll: res.data,
-                    votes: Array(res.data.questions.length)
+                    votes: Array(res.data.questions.length),
+                    validPassword: res.data.password === null
                 })
             }
         })
@@ -67,37 +88,47 @@ export default class Poll extends React.Component {
 
     render() {
         if (this.state.poll.questions) {
-            return (
-                <div>
-                    <h2>Vote on Poll</h2>
-                    <br/>
+            if (this.state.validPassword) {
+                return (
+                    <div>
+                        <h2>Vote on Poll</h2>
+                        <br/>
 
-                    {
-                        this.state.poll.questions.map((question, qIndex) => {
-                            let questionTitle = <p
-                                key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
+                        {
+                            this.state.poll.questions.map((question, qIndex) => {
+                                let questionTitle = <p
+                                    key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
 
-                            let options = question.options.map((option, oIndex) => {
-                                let optionText = <div className={'result-option'} key={`q${qIndex}o${oIndex}`}
-                                                      onClick={() => this.voteOption(qIndex, oIndex)}>{option.value}</div>;
+                                let options = question.options.map((option, oIndex) => {
+                                    let optionText = <div className={'result-option'} key={`q${qIndex}o${oIndex}`}
+                                                          onClick={() => this.voteOption(qIndex, oIndex)}>{option.value}</div>;
 
-                                return [optionText]
+                                    return [optionText]
+                                })
+
+                                return [questionTitle, options, <br/>]
                             })
+                        }
 
-                            return [questionTitle, options, <br/>]
-                        })
-                    }
+                        <br/><br/>
+                        <div className={'bottom-buttons'}>
+                            <button onClick={() => this.submitVote()}>vote</button>
+                            <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
+                        </div>
+                        <br/><br/>
 
-                    <br/><br/>
-                    <div className={'bottom-buttons'}>
-                        <button onClick={() => this.submitVote()}>vote</button>
-                        <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
+                        <ShareButtons shareUrl={window.location.href}/>
                     </div>
-                    <br/><br/>
-
-                    <ShareButtons shareUrl={window.location.href}/>
-                </div>
-            )
+                )
+            } else{
+                return (
+                    <div>
+                        <p>This poll requires a password.</p>
+                        <input type='text' placeholder="password" value={this.state.password} onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
+                        <button onClick={() => this.submitPassword()}>submit</button>
+                    </div>
+                    )
+            }
         } else {
             return (
                 <div>poll not found</div>
