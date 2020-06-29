@@ -175,6 +175,7 @@ export default class CreatePoll extends React.Component {
         }
     }
 
+    // TODO change this abomination
     submitPoll2 = () => {
         if (this.validatePoll()) {
             let poll = JSON.parse(JSON.stringify(this.state.poll));

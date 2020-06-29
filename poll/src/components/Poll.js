@@ -124,7 +124,7 @@ export default class Poll extends React.Component {
                 return (
                     <div>
                         <p>This poll requires a password.</p>
-                        <input type='text' placeholder="password" value={this.state.password} onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
+                        <input type='password' placeholder="password" value={this.state.password} onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
                         <button onClick={() => this.submitPassword()}>submit</button>
                     </div>
                     )

@@ -6,7 +6,7 @@
 * ~~Validation for voting on required questions~~
 * ~~Passwords~~
 * ~~Validation for new polls~~
-* Add graphs to results
+* ~~Add charts to results~~
 * ~~Add styling~~
 
 ## Ideas
