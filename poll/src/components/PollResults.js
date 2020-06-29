@@ -103,8 +103,6 @@ export default class PollResults extends React.Component {
 
                     <ShareButtons shareUrl={window.location.href}/>
 
-                    <button onClick={() => this.updateData()}>tertet</button>
-
                 </div>
             )
         } else {
