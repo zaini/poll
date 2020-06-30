@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import ShareButtons from "./Share";
+
 var bcrypt = require('bcryptjs');
 
 export default class Poll extends React.Component {
@@ -66,8 +67,7 @@ export default class Poll extends React.Component {
         let enteredPassword = this.state.password;
         let hashedPassword = this.state.poll.password;
         let that = this;
-        bcrypt.compare(enteredPassword, hashedPassword, function(err, res) {
-            console.log(res);
+        bcrypt.compare(enteredPassword, hashedPassword, (err, res) => {
             that.setState({
                 validPassword: res
             })
@@ -101,6 +101,10 @@ export default class Poll extends React.Component {
 
                                 let options = question.options.map((option, oIndex) => {
                                     let optionText = <div className={'result-option'} key={`q${qIndex}o${oIndex}`}
+                                                          style={this.state.votes[qIndex] === oIndex ? {
+                                                              backgroundColor: "#464646",
+                                                              color: "white"
+                                                          } : null}
                                                           onClick={() => this.voteOption(qIndex, oIndex)}>{option.value}</div>;
 
                                     return [optionText]
@@ -120,14 +124,15 @@ export default class Poll extends React.Component {
                         <ShareButtons shareUrl={window.location.href}/>
                     </div>
                 )
-            } else{
+            } else {
                 return (
                     <div>
                         <p>This poll requires a password.</p>
-                        <input type='password' placeholder="password" value={this.state.password} onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
+                        <input type='password' placeholder="password" value={this.state.password}
+                               onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
                         <button onClick={() => this.submitPassword()}>submit</button>
                     </div>
-                    )
+                )
             }
         } else {
             return (

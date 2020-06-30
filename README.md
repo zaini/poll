@@ -11,10 +11,10 @@
 * Complete refactoring
 * Error pages/handling
 * Footer
-* Highlight selected option
-* Example polls
+* ~~Highlight selected option~~
+* ~~Example polls~~
 * Delete after X time
-* Must log in to vote / stop duplicate votes based on IP
+* Must log in to vote / stop duplicate votes based on IP / use cookies
 * Add other types of voting (can select multiple options, select number in range, etc.)
 * Change PollIDs to be a hash
 * Update results page live

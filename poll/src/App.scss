@@ -47,9 +47,13 @@ input{
   background-color: white;
   transition-duration: 0.3s;
   border-radius: 4px;
-  border: 2px #484848 solid;
+  border: 1px #484848 solid;
   padding: 5px 10px;
   margin: 5px 5px 5px 0px;
+}
+
+input:focus{
+  border: 2px #484848 solid;
 }
 
 button{
@@ -80,4 +84,13 @@ button:hover{
   button{
     font-size: 140%;
   }
+}
+
+footer{
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+}
+
+.footer-links{
+  float: right;
 }

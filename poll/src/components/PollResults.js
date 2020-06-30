@@ -1,19 +1,36 @@
 import React from 'react';
 import axios from "axios";
 import ShareButtons from "./Share";
-import { Doughnut } from 'react-chartjs-2';
+import {Doughnut} from 'react-chartjs-2';
+
+var bcrypt = require('bcryptjs');
 
 export default class PollResults extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            validPassword: false,
             pollID: this.props.match.params.poll_id,
             poll: {},
             data: {}
         };
     }
 
+    componentDidMount() {
+        axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
+            if (res.data) {
+                let poll = res.data;
+                this.setState({
+                    poll: poll,
+                    results: Array(poll.questions.length),
+                    validPassword: res.data.password === null
+                })
+            }
+        })
+    }
+
+    // TODO fat refactor
     updateData = (results) => {
         let data = {
             labels: [],
@@ -48,63 +65,80 @@ export default class PollResults extends React.Component {
         return data
     }
 
-    componentDidMount() {
-        axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
-            if (res.data) {
-                let poll = res.data;
-                this.setState({
-                    poll: poll,
-                    results: Array(poll.questions.length)
-                })
-            }
+    changeEnteredPassword = (password) => {
+        this.setState({
+            password: password
         })
+    }
+
+    submitPassword = () => {
+        let enteredPassword = this.state.password;
+        let hashedPassword = this.state.poll.password;
+        let that = this;
+        bcrypt.compare(enteredPassword, hashedPassword, (err, res) => {
+            that.setState({
+                validPassword: res
+            })
+        });
     }
 
     render() {
         if (this.state.poll.questions) {
-            return (
-                <div>
-                    <h2>Poll Results</h2>
-                    <br/>
-                    {
-                        this.state.poll.questions.map((question, qIndex) => {
-                            this.state.results[qIndex] = [];
-                            let questionTitle = <p key={`q${qIndex}`}>{question.question}</p>;
+            if (this.state.validPassword) {
+                return (
+                    <div>
+                        <h2>Poll Results</h2>
+                        <br/>
+                        {
+                            this.state.poll.questions.map((question, qIndex) => {
+                                this.state.results[qIndex] = [];
+                                let questionTitle = <p key={`q${qIndex}`}>{question.question}</p>;
 
-                            let totalVotes = 0;
-                            question.options.forEach(option => {
-                                totalVotes += option.votes;
+                                let totalVotes = 0;
+                                question.options.forEach(option => {
+                                    totalVotes += option.votes;
+                                })
+                                let votes = <p>Total Votes: {totalVotes}</p>
+
+                                let options = question.options.map((option, oIndex) => {
+                                    let votePercentage = option.votes === 0 ? 0 : Math.floor(100 * option.votes / totalVotes);
+
+                                    this.state.results[qIndex].push([option.value, option.votes]);
+
+                                    let optionText = <div className={'result-option'}
+                                                          key={`q${qIndex}o${oIndex}`}>{option.value}
+                                        <span
+                                            className={'results'}>{option.votes} votes | {votePercentage}%</span>
+                                    </div>;
+                                    return [optionText]
+                                })
+
+                                let chart = <Doughnut data={this.updateData(this.state.results[qIndex])} height={70}/>;
+
+                                return [questionTitle, options, votes, totalVotes > 0 ? chart : null, <br/>]
                             })
-                            let votes = <p>Total Votes: {totalVotes}</p>
+                        }
 
-                            let options = question.options.map((option, oIndex) => {
-                                let votePercentage = option.votes === 0 ? 0 : Math.floor(100 * option.votes / totalVotes);
+                        <div className={'bottom-buttons'}>
+                            <button onClick={() => window.location.href = window.location.href.slice(0, -2)}>vote
+                            </button>
+                        </div>
+                        <br/><br/>
 
-                                this.state.results[qIndex].push([option.value, option.votes]);
+                        <ShareButtons shareUrl={window.location.href}/>
 
-                                let optionText = <div className={'result-option'}
-                                                      key={`q${qIndex}o${oIndex}`}>{option.value}
-                                    <span
-                                        className={'results'}>{option.votes} votes | {votePercentage}%</span>
-                                </div>;
-                                return [optionText]
-                            })
-
-                            let chart = <Doughnut data={this.updateData(this.state.results[qIndex])} height={75}/>;
-
-                            return [questionTitle, options, votes, chart, <br/>]
-                        })
-                    }
-
-                    <div className={'bottom-buttons'}>
-                        <button onClick={() => window.location.href = window.location.href.slice(0, -2)}>vote</button>
                     </div>
-                    <br/><br/>
-
-                    <ShareButtons shareUrl={window.location.href}/>
-
-                </div>
-            )
+                )
+            } else {
+                return (
+                    <div>
+                        <p>This poll requires a password.</p>
+                        <input type='password' placeholder="password" value={this.state.password}
+                               onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
+                        <button onClick={() => this.submitPassword()}>submit</button>
+                    </div>
+                )
+            }
         } else {
             return (
                 <div>poll not found</div>

@@ -128,9 +128,6 @@ export default class CreatePoll extends React.Component {
             questionsAreValid = !validatedQuestionsPerQuestion.includes(false);
         }
 
-        // console.log(`has >0 questions: ${containsQuestions}\nhas >0 options ${questionsContainOptions}\nvalid options ${optionsAreValid}\nvalid questions: ${questionsAreValid}`);
-        // console.log(`valid poll: ${pollIsValid}`);
-
         let pollIsValid = containsQuestions && questionsContainOptions && optionsAreValid && questionsAreValid;
         return pollIsValid;
     }
@@ -269,9 +266,6 @@ export default class CreatePoll extends React.Component {
                 <div className={'bottom-buttons'}>
                     <button onClick={() => this.submitPoll2()}>submit</button>
                 </div>
-
-                <br/>
-                {JSON.stringify(this.state.poll)}
             </div>
         )
     }
