@@ -1,9 +1,9 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import './App.scss';
-import CreatePoll from "./components/CreatePoll";
-import Poll from "./components/Poll";
-import PollResults from "./components/PollResults";
+import CreatePoll from "./pages/CreatePoll";
+import Poll from "./pages/Poll";
+import PollResults from "./pages/PollResults";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -16,7 +16,9 @@ export default class App extends React.Component {
                 <div style={{textAlign: "center"}}>
                     <h1 className='title'><a href="/">Poll</a></h1>
                 </div>
+
                 <br/>
+
                 <Router>
                     <Route exact path={"/"} component={CreatePoll}/>
                     <Route exact path={"/:poll_id"} component={Poll}/>
@@ -24,10 +26,6 @@ export default class App extends React.Component {
                 </Router>
 
                 <br/><br/>
-
-                {/*<a href="/27">example poll</a>*/}
-                {/*<br/>*/}
-                {/*<a href="/27/r">example results</a>*/}
 
                 <footer>
                         <span>Ali Zaini &copy; 2020</span>

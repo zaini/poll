@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from "axios";
-import ShareButtons from "./Share";
+import ShareButtons from "../components/Share";
+import ErrorPage from "../components/ErrorPage";
+import PasswordEntry from "../components/PasswordEntry";
 
 var bcrypt = require('bcryptjs');
 
@@ -126,17 +128,12 @@ export default class Poll extends React.Component {
                 )
             } else {
                 return (
-                    <div>
-                        <p>This poll requires a password.</p>
-                        <input type='password' placeholder="password" value={this.state.password}
-                               onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
-                        <button onClick={() => this.submitPassword()}>submit</button>
-                    </div>
+                    <PasswordEntry passwordValue = {this.state.password} changeEnteredPassword = {(value) => this.changeEnteredPassword(value)} submitPassword = {() => this.submitPassword()} />
                 )
             }
         } else {
             return (
-                <div>poll not found</div>
+                <ErrorPage />
             )
         }
     }

@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from "axios";
-import ShareButtons from "./Share";
+import ShareButtons from "../components/Share";
 import {Doughnut} from 'react-chartjs-2';
+import PasswordEntry from "../components/PasswordEntry";
+import ErrorPage from "../components/ErrorPage";
 
 var bcrypt = require('bcryptjs');
 
@@ -43,12 +45,12 @@ export default class PollResults extends React.Component {
                     '#262626',
                     '#F8F8FF',
                     '#123456',
+                    '#43291F',
                     '#DD7373',
                     '#FCFC62',
                     '#293F14',
                     '#DA2C38',
                     '#F2BAC9',
-                    '#43291F',
                     '#BAD7F2',
                     '#BAF2E9',
                     '#B0F2B4',
@@ -131,17 +133,12 @@ export default class PollResults extends React.Component {
                 )
             } else {
                 return (
-                    <div>
-                        <p>This poll requires a password.</p>
-                        <input type='password' placeholder="password" value={this.state.password}
-                               onChange={(e) => this.changeEnteredPassword(e.target.value)}/>
-                        <button onClick={() => this.submitPassword()}>submit</button>
-                    </div>
+                    <PasswordEntry passwordValue = {this.state.password} changeEnteredPassword = {(value) => this.changeEnteredPassword(value)} submitPassword = {() => this.submitPassword()} />
                 )
             }
         } else {
             return (
-                <div>poll not found</div>
+                <ErrorPage />
             )
         }
     }

@@ -9,8 +9,8 @@
 * ~~Add charts to results~~
 * ~~Add styling~~
 * Complete refactoring
-* Error pages/handling
-* Footer
+* ~~Error pages/handling~~
+* ~~Footer~~
 * ~~Highlight selected option~~
 * ~~Example polls~~
 * Delete after X time

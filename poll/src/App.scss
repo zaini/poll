@@ -1,14 +1,14 @@
-*{
+* {
   color: #464646;
   font-family: 'Roboto', serif;
 }
 
-.main-container{
+.main-container {
   width: 50%;
   margin: 0 auto;
 }
 
-.title{
+.title {
   border: 4px #464646 solid;
   border-right: 2px transparent solid;
   border-bottom-left-radius: 10px;
@@ -16,34 +16,34 @@
   display: inline-block;
   padding-left: 5px;
 
-  a{
+  a {
     text-decoration: none;
   }
 }
 
-.results{
+.results {
   transition-duration: 0.3s;
   background-color: transparent;
   float: right;
 }
 
-.result-option{
+.result-option {
   transition-duration: 0.3s;
   border: 1px #484848 solid;
   margin: 5px;
   padding: 5px;
 }
 
-.result-option:hover{
+.result-option:hover {
   background-color: #464646;
   color: white;
 
-  .results{
+  .results {
     color: white;
   }
 }
 
-input{
+input {
   background-color: white;
   transition-duration: 0.3s;
   border-radius: 4px;
@@ -52,11 +52,11 @@ input{
   margin: 5px 5px 5px 0px;
 }
 
-input:focus{
+input:focus {
   border: 2px #484848 solid;
 }
 
-button{
+button {
   background-color: white;
   transition-duration: 0.3s;
   border-radius: 4px;
@@ -64,12 +64,12 @@ button{
   padding: 5px 10px;
 }
 
-button:hover{
+button:hover {
   background-color: #464646;
   color: white;
 }
 
-.share-buttons{
+.share-buttons {
   display: flex;
   text-align: center;
   justify-content: space-evenly;
@@ -77,20 +77,25 @@ button:hover{
   margin: 0 auto;
 }
 
-.bottom-buttons{
+.bottom-buttons {
   display: flex;
   text-align: center;
   justify-content: space-evenly;
-  button{
+
+  button {
     font-size: 140%;
   }
 }
 
-footer{
+footer {
   padding-top: 2vh;
   padding-bottom: 2vh;
 }
 
-.footer-links{
+.footer-links {
   float: right;
+}
+
+.password-entry, .error{
+  text-align: center;
 }

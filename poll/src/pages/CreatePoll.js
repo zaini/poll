@@ -199,7 +199,6 @@ export default class CreatePoll extends React.Component {
                 bcrypt.genSalt(10, function (err, salt) {
                     bcrypt.hash(password, salt, function (err, hash) {
                         poll.password = hash;
-                        console.log(hash);
                         that.setState({
                             poll: poll
                         }, () => {
