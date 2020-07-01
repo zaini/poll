@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import './App.scss';
 import CreatePoll from "./pages/CreatePoll";
 import Poll from "./pages/Poll";
@@ -25,7 +25,7 @@ export default class App extends React.Component {
                         <Route exact path={"/"} component={CreatePoll}/>
                         <Route exact path={"/:poll_id"} component={Poll}/>
                         <Route exact path={"/:poll_id/r"} component={PollResults}/>
-                        <Route component={ErrorPage} />
+                        <Route component={ErrorPage}/>
                     </Switch>
                 </Router>
 

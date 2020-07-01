@@ -4,7 +4,8 @@ import ShareButtons from "../components/Share";
 import {Doughnut} from 'react-chartjs-2';
 import PasswordEntry from "../components/PasswordEntry";
 import ErrorPage from "../components/ErrorPage";
-var bcrypt = require('bcryptjs');
+
+const bcrypt = require('bcryptjs');
 
 export default class PollResults extends React.Component {
     constructor(props) {
@@ -132,12 +133,14 @@ export default class PollResults extends React.Component {
                 )
             } else {
                 return (
-                    <PasswordEntry passwordValue = {this.state.password} changeEnteredPassword = {(value) => this.changeEnteredPassword(value)} submitPassword = {() => this.submitPassword()} />
+                    <PasswordEntry passwordValue={this.state.password}
+                                   changeEnteredPassword={(value) => this.changeEnteredPassword(value)}
+                                   submitPassword={() => this.submitPassword()}/>
                 )
             }
         } else {
             return (
-                <ErrorPage />
+                <ErrorPage/>
             )
         }
     }
