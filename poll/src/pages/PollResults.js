@@ -4,7 +4,6 @@ import ShareButtons from "../components/Share";
 import {Doughnut} from 'react-chartjs-2';
 import PasswordEntry from "../components/PasswordEntry";
 import ErrorPage from "../components/ErrorPage";
-
 var bcrypt = require('bcryptjs');
 
 export default class PollResults extends React.Component {

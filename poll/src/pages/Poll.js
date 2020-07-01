@@ -3,7 +3,6 @@ import axios from "axios";
 import ShareButtons from "../components/Share";
 import ErrorPage from "../components/ErrorPage";
 import PasswordEntry from "../components/PasswordEntry";
-
 var bcrypt = require('bcryptjs');
 
 export default class Poll extends React.Component {

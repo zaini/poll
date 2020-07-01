@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from "axios";
-
 var bcrypt = require('bcryptjs');
 
 export default class CreatePoll extends React.Component {
