@@ -4,8 +4,8 @@ import ShareButtons from "../components/Share";
 import ErrorPage from "../components/ErrorPage";
 import PasswordEntry from "../components/PasswordEntry";
 import Cookies from 'universal-cookie';
-const bcrypt = require('bcryptjs');
 
+const bcrypt = require('bcryptjs');
 const cookies = new Cookies();
 
 export default class Poll extends React.Component {

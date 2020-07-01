@@ -34,13 +34,16 @@ export default class CreatePoll extends React.Component {
         poll.questions[qIndex].options[oIndex].value = value;
         this.setState({
             poll: poll
+        }, () => {
+            if (poll.questions[qIndex].options.length === oIndex + 1){
+                this.addOption(qIndex);
+            }
         });
     }
 
     addOption = (qIndex) => {
         let poll = JSON.parse(JSON.stringify(this.state.poll));
         poll.questions[qIndex].options.push({type: "short-text", value: undefined, votes: 0});
-        console.log(poll.questions);
         this.setState({
             poll: poll
         });
