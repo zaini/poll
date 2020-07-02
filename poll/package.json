@@ -23,8 +23,10 @@
     "universal-cookie": "^4.0.3"
   },
   "scripts": {
-    "start": "node backend/index.js",
-    "heroku-postbuild": "cd poll && npm install && npm run build"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
