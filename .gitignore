@@ -1,3 +1,4 @@
 .env
 /poll/build/
 /poll/node_modules/
+/.idea/

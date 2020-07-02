@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "nodemon backend/index.js",
+    "start": "node backend/index.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run poll/build"
   },
   "eslintConfig": {
