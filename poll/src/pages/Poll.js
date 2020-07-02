@@ -27,24 +27,59 @@ export default class Poll extends React.Component {
         });
     }
 
+    setPassword = (password) => {
+        this.setState({
+            password: password
+        });
+    }
+
+    submitPassword = () => {
+        let enteredPassword = this.state.password;
+        let hashedPassword = this.state.poll.password;
+        let that = this;
+        bcrypt.compare(enteredPassword, hashedPassword, (err, res) => {
+            that.setState({
+                validPassword: res
+            });
+        });
+    }
+
+    isPollValid = (poll) => {
+        let isValid = true;
+        poll.questions.forEach((question, qIndex) => {
+            if (question.required && this.state.votes[qIndex] === undefined) {
+                isValid = false;
+            }
+        })
+        return isValid
+    }
+
+    putVote = () => {
+        axios.put(`http://localhost:5001/polls`, this.state.poll)
+            .then(res => {
+                if (res.status === 200) {
+                    if (cookies.get('votedOn') !== undefined) {
+                        cookies.set('votedOn', [...cookies.get('votedOn'), res.data.pollID]);
+                    } else {
+                        cookies.set('votedOn', [res.data.pollID]);
+                    }
+                    alert(`Your vote has been submitted!`);
+                    window.location.href = window.location.href + "/r";
+                } else {
+                    alert("Something went wrong with submitting your vote. Please try again or contact the admin.");
+                }
+            });
+    }
+
     submitVote = () => {
-        // TODO check cookies that they have not voted on this pollID already
-        if (cookies.get('votedOn') !== undefined && cookies.get('votedOn').includes(this.state.pollID)){
+        if (cookies.get('votedOn') !== undefined && cookies.get('votedOn').includes(this.state.pollID)) {
             alert("You have already voted on this poll and so cannot do so again.");
             return
         }
 
-        // TODO redo to be more efficient
         let poll = JSON.parse(JSON.stringify(this.state.poll));
 
-        let valid = true;
-        poll.questions.forEach((question, qIndex) => {
-            if (question.required && this.state.votes[qIndex] === undefined) {
-                valid = false;
-            }
-        })
-
-        if (!valid) {
+        if (!this.isPollValid(poll)) {
             alert(`You must respond to all required questions.`);
             return
         }
@@ -55,48 +90,17 @@ export default class Poll extends React.Component {
 
         this.setState({
             poll: poll
-        }, () => {
-            axios.put(`http://localhost:5001/polls`, this.state.poll)
-                .then(res => {
-                    if (res.status === 200) {
-                        if (cookies.get('votedOn') !== undefined) {
-                            cookies.set('votedOn', [...cookies.get('votedOn'), res.data.pollID]);
-                        } else {
-                            cookies.set('votedOn', [res.data.pollID]);
-                        }
-                        alert(`Your vote has been submitted!`);
-                        window.location.href = window.location.href + "/r";
-                    } else {
-                        alert("Something went wrong with submitting your vote. Please try again or contact the admin.");
-                    }
-                });
-        });
-    }
-
-    changeEnteredPassword = (password) => {
-        this.setState({
-            password: password
-        })
-    }
-
-    submitPassword = () => {
-        let enteredPassword = this.state.password;
-        let hashedPassword = this.state.poll.password;
-        let that = this;
-        bcrypt.compare(enteredPassword, hashedPassword, (err, res) => {
-            that.setState({
-                validPassword: res
-            })
-        });
+        }, () => this.putVote());
     }
 
     componentDidMount() {
         axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
             if (res.data) {
+                let poll = res.data;
                 this.setState({
-                    poll: res.data,
-                    votes: Array(res.data.questions.length),
-                    validPassword: res.data.password === null
+                    poll: poll,
+                    votes: Array(poll.questions.length),
+                    validPassword: poll.password === null
                 })
             }
         })
@@ -131,10 +135,12 @@ export default class Poll extends React.Component {
                         }
 
                         <br/><br/>
+
                         <div className={'bottom-buttons'}>
                             <button onClick={() => this.submitVote()}>vote</button>
                             <button onClick={() => window.location.href = window.location.href + "/r"}>results</button>
                         </div>
+
                         <br/><br/>
 
                         <ShareButtons shareUrl={window.location.href}/>
@@ -143,7 +149,7 @@ export default class Poll extends React.Component {
             } else {
                 return (
                     <PasswordEntry passwordValue={this.state.password}
-                                   changeEnteredPassword={(value) => this.changeEnteredPassword(value)}
+                                   changeEnteredPassword={(value) => this.setPassword(value)}
                                    submitPassword={() => this.submitPassword()}/>
                 )
             }

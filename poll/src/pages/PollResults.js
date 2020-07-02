@@ -19,20 +19,6 @@ export default class PollResults extends React.Component {
         };
     }
 
-    componentDidMount() {
-        axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
-            if (res.data) {
-                let poll = res.data;
-                this.setState({
-                    poll: poll,
-                    results: Array(poll.questions.length),
-                    validPassword: res.data.password === null
-                })
-            }
-        })
-    }
-
-    // TODO fat refactor
     updateData = (results) => {
         let data = {
             labels: [],
@@ -67,7 +53,7 @@ export default class PollResults extends React.Component {
         return data
     }
 
-    changeEnteredPassword = (password) => {
+    setPassword = (password) => {
         this.setState({
             password: password
         })
@@ -82,6 +68,19 @@ export default class PollResults extends React.Component {
                 validPassword: res
             })
         });
+    }
+
+    componentDidMount() {
+        axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
+            if (res.data) {
+                let poll = res.data;
+                this.setState({
+                    poll: poll,
+                    results: Array(poll.questions.length),
+                    validPassword: poll.password === null
+                })
+            }
+        })
     }
 
     render() {
@@ -134,7 +133,7 @@ export default class PollResults extends React.Component {
             } else {
                 return (
                     <PasswordEntry passwordValue={this.state.password}
-                                   changeEnteredPassword={(value) => this.changeEnteredPassword(value)}
+                                   changeEnteredPassword={(value) => this.setPassword(value)}
                                    submitPassword={() => this.submitPassword()}/>
                 )
             }

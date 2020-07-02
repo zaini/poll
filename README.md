@@ -13,11 +13,11 @@
 * ~~Highlight selected option~~
 * ~~Example polls~~
 * ~~Must log in to vote / stop duplicate votes based on IP / use cookies~~
-* Update results page live
+* Update results page live using websockets
 * Complete refactoring
 * Automatically remove empty options/questions when submitting poll (keeping it valid)
-* Auto add options when filling out questions
+* ~~Auto add options when filling out questions~~
 * Explanation of design decisions
 * Delete after X time
 * Add other types of voting (can select multiple options, select number in range, etc.)
-* Change PollIDs to be a hash
+* Change PollIDs to be a hash (?)
