@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -9,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Connecting to MongoDB
-const uri = "mongodb+srv://admin:ZlJXnkp1WKkA3Esa@cluster0.skugx.mongodb.net/Poll?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true});
 const connection = mongoose.connection;
 connection.once('open', () => {
