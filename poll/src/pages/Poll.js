@@ -55,7 +55,7 @@ export default class Poll extends React.Component {
     }
 
     putVote = () => {
-        axios.put(`http://localhost:5001/polls`, this.state.poll)
+        axios.put(`/polls`, this.state.poll)
             .then(res => {
                 if (res.status === 200) {
                     if (cookies.get('votedOn') !== undefined) {
@@ -94,7 +94,7 @@ export default class Poll extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
+        axios.get(`/polls/${this.state.pollID}`).then(res => {
             if (res.data) {
                 let poll = res.data;
                 this.setState({

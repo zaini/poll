@@ -71,7 +71,7 @@ export default class PollResults extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:5001/polls/${this.state.pollID}`).then(res => {
+        axios.get(`/polls/${this.state.pollID}`).then(res => {
             if (res.data) {
                 let poll = res.data;
                 this.setState({

@@ -168,7 +168,7 @@ export default class CreatePoll extends React.Component {
                 this.setState({
                     poll: poll
                 }, () => {
-                    axios.post(`http://localhost:5001/polls`, this.state.poll)
+                    axios.post(`/polls`, this.state.poll)
                         .then(res => {
                             if (res.status === 200) {
                                 alert(`Your poll has been posted! \nID: ${res.data.id}`);
@@ -185,7 +185,7 @@ export default class CreatePoll extends React.Component {
                         that.setState({
                             poll: poll
                         }, () => {
-                            axios.post(`http://localhost:5001/polls`, that.state.poll)
+                            axios.post(`/polls`, that.state.poll)
                                 .then(res => {
                                     if (res.status === 200) {
                                         alert(`Your poll has been posted! \nID: ${res.data.id}`);
@@ -206,7 +206,7 @@ export default class CreatePoll extends React.Component {
     submitPoll = () => {
         if (this.validatePoll()) {
             this.encryptPoll();
-            axios.post(`http://localhost:5001/polls`, this.state.poll)
+            axios.post(`/polls`, this.state.poll)
                 .then(res => {
                     if (res.status === 200) {
                         alert(`Your poll has been posted! \nID: ${res.data.id}`);

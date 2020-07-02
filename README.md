@@ -1,6 +1,8 @@
 # poll
 🗳️ simple polling 🗳️
 
+https://trello.com/b/xGfgNyGi/voting-app
+
 ## Features/stuff I'm working on
 * ~~Questions can be set as required/non-required~~
 * ~~Validation for voting on required questions~~
