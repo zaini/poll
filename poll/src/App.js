@@ -29,12 +29,6 @@ export default class App extends React.Component {
                     </Switch>
                 </Router>
 
-                {/*<Router>*/}
-                {/*    <Route exact path={"/"} component={CreatePoll}/>*/}
-                {/*    <Route path={"/:poll_id"} component={Poll}/>*/}
-                {/*    <Route path={"/:poll_id/r"} component={PollResults}/>*/}
-                {/*</Router>*/}
-
                 <br/><br/>
 
                 <footer>
