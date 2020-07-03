@@ -116,8 +116,7 @@ export default class Poll extends React.Component {
 
                         {
                             this.state.poll.questions.map((question, qIndex) => {
-                                let questionTitle = <p
-                                    key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
+                                let questionTitle = <p key={`q${qIndex}`}>{question.question} {question.required ? "(required)" : null}</p>;
 
                                 let options = question.options.map((option, oIndex) => {
                                     let optionText = <div className={'result-option'} key={`q${qIndex}o${oIndex}`}
